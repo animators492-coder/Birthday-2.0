@@ -1,0 +1,230 @@
+ <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title> Happy Birthday ॐ !</title>
+    <style>
+        body { 
+            margin: 0; 
+            padding: 0; 
+            font-family: 'Comic Sans MS', cursive, sans-serif; 
+            overflow: hidden; 
+            transition: background-color 1s ease;
+            background-color: #000; /* Starts Black */
+        }
+        
+        .screen { 
+            display: none; 
+            height: 100vh; 
+            width: 100vw; 
+            flex-direction: column; 
+            justify-content: center; 
+            align-items: center; 
+            position: relative;
+        }
+        .active { display: flex; }
+
+        /* --- LEVEL 1: DECORATION --- */
+        #ribbons {
+            position: absolute;
+            top: -200px;
+            left: 0;
+            width: 100%;
+            display: flex;
+            justify-content: space-around;
+            transition: top 1s ease-in-out;
+            z-index: 5;
+        }
+        .ribbon { width: 15px; height: 180px; border-radius: 0 0 10px 10px; box-shadow: 2px 2px 5px rgba(0,0,0,0.2); }
+        .r1 { background: #E30013; } .r2 { background: #FFD700; } .r3 { background: #FFFFFF; }
+
+        .gadget { font-size: 50px; position: absolute; opacity: 0; transition: opacity 1s; animation: float 3s infinite ease-in-out; }
+        @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-20px); } }
+
+        /* --- LEVEL 2 & 3: CAKE & CANDLE ALIGNMENT --- */
+        .cake-box {
+            position: relative;
+            display: inline-block;
+            font-size: 120px; /* Cake Size */
+            line-height: 1;
+            margin-top: 50px;
+        }
+        .candle-wrapper {
+            position: absolute;
+            top: -35px; /* Sits on top of cake */
+            left: 50%;
+            transform: translateX(-50%);
+            width: 40px;
+            height: 50px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .candle-img {
+            font-size: 45px;
+            cursor: pointer;
+            z-index: 2;
+        }
+        .flame-img {
+            position: absolute;
+            top: -25px; /* Sits on top of candle wick */
+            font-size: 35px;
+            animation: flicker 0.1s infinite;
+            z-index: 3;
+        }
+        @keyframes flicker { 
+            0% { opacity: 0.8; transform: scale(1); } 
+            100% { opacity: 1; transform: scale(1.1) translateX(-1px); } 
+        }
+
+        /* --- LEVEL 4: GAME --- */
+        #game-area { width: 320px; height: 350px; background: #fffbe6; border: 6px solid #0096D7; border-radius: 20px; position: relative; overflow: hidden; }
+        #mouse { position: absolute; font-size: 30px; transition: 0.4s; cursor: pointer; user-select: none; }
+
+        /* --- BUTTONS --- */
+        .btn { 
+            background: #FFD700; border: 3px solid #333; padding: 15px 30px; 
+            font-size: 1.2rem; border-radius: 50px; cursor: pointer; z-index: 10;
+            font-weight: bold; margin-top: 30px; box-shadow: 0 4px #b8860b;
+        }
+        .btn:active { transform: translateY(2px); box-shadow: 0 2px #b8860b; }
+
+        /* --- LEVEL 5: CREDITS --- */
+        #level5 { background: black !important; color: white; }
+        .roll { animation: rollUp 10s linear forwards; text-align: center; }
+        @keyframes rollUp { from { transform: translateY(100%); } to { transform: translateY(-30%); } }
+        .gold { color: #FFD700; font-size: 3rem; }
+    </style>
+</head>
+<body>
+
+    <div id="level1" class="screen active">
+        <div id="ribbons">
+            <div class="ribbon r1"></div><div class="ribbon r2"></div><div class="ribbon r3"></div>
+            <div class="ribbon r1"></div><div class="ribbon r2"></div><div class="ribbon r3"></div>
+        </div>
+        
+        <h1 id="welcome-text" style="color: white;">It's very dark here Om...</h1>
+        <button id="decor-btn" class="btn" onclick="decorate()">Decorate the Room! ✨</button>
+        
+        <div class="gadget" style="top:20%; left:10%;">🎈</div>
+        <div class="gadget" style="top:30%; right:15%;">🚁</div>
+        <div class="gadget" style="bottom:15%; left:20%;">🥞</div>
+        
+        <button id="to-lvl2" class="btn" style="display:none;" onclick="nextLevel(2)">Next: Light the Cake! 🎂</button>
+    </div>
+
+    <div id="level2" class="screen">
+        <h2 style="color: white;">Touch the candle to light it!</h2>
+        <div class="cake-box">
+            🎂
+            <div class="candle-wrapper">
+                <div id="flame-l2" class="flame-img" style="display:none;">🔥</div>
+                <div id="candle-l2" class="candle-img" onclick="lightCandle()">🕯️</div>
+            </div>
+        </div>
+        <button id="to-lvl3" class="btn" style="display:none;" onclick="nextLevel(3)">Now Blow... 🌬️</button>
+    </div>
+
+    <div id="level3" class="screen">
+        <h2 style="color: white;">Blow into the Phone to put it out!</h2>
+        <div class="cake-box">
+            🎂
+            <div class="candle-wrapper">
+                <div id="flame-l3" class="flame-img">🔥</div>
+                <div class="candle-img" onclick="putOutCandle()">🕯️</div>
+            </div>
+        </div>
+        <p style="color: white; margin-top:20px;">(Blow or Tap the flame!)</p>
+        <button id="to-lvl4" class="btn" style="display:none;" onclick="nextLevel(4)">Save the Cake from Mice! 🐭</button>
+    </div>
+
+    <div id="level4" class="screen">
+        <h2 style="color: white;">Catch 7 Mice! (Big Light Active)</h2>
+        <div id="game-area">
+            <div id="mouse" onclick="catchMouse()">🐭</div>
+        </div>
+        <div style="color: white; font-size: 1.5rem; margin-top: 10px;">Score: <span id="score">0</span> / 7</div>
+    </div>
+
+    <div id="level5" class="screen">
+        <div class="roll">
+            <h1 class="gold">THE END</h1>
+            <p>Janmadin Mubarak, Om!</p>
+            <p>Produced By:</p>
+            <h2 style="color: #0096D7; font-size: 2.5rem;">By All Family</h2>
+            <br>
+            <p>"Tum jiyo hazaron saal, saal ke din hon pachas hazar!"</p>
+            <p>"Hamesha khush raho aur aise hi haste raho. Happy Birthday Om !</p>
+            <button class="btn" onclick="location.reload()">Play Again</button>
+        </div>
+    </div>
+
+    <script>
+        let currentScore = 0;
+        let mouseSize = 30;
+
+        function nextLevel(lvl) {
+            document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+            document.getElementById('level' + lvl).classList.add('active');
+            if(lvl === 3) startMicDetection();
+            if(lvl === 4) setInterval(moveMouse, 2000);
+        }
+
+        function decorate() {
+            document.body.style.backgroundColor = "#87CEEB"; 
+            document.getElementById('ribbons').style.top = "0";
+            document.getElementById('welcome-text').innerText = "Happy Birthday Om!";
+            document.getElementById('welcome-text').style.color = "#E30013";
+            document.querySelectorAll('.gadget').forEach(g => g.style.opacity = "1");
+            document.getElementById('decor-btn').style.display = "none";
+            document.getElementById('to-lvl2').style.display = "inline-block";
+        }
+
+        function lightCandle() {
+            document.getElementById('flame-l2').style.display = 'block';
+            document.getElementById('to-lvl3').style.display = 'inline-block';
+        }
+
+        function putOutCandle() {
+            document.getElementById('flame-l3').style.display = 'none';
+            document.getElementById('to-lvl4').style.display = 'inline-block';
+        }
+
+        function startMicDetection() {
+            navigator.mediaDevices.getUserMedia({ audio: true }).then(stream => {
+                const audioContext = new AudioContext();
+                const analyser = audioContext.createAnalyser();
+                const mic = audioContext.createMediaStreamSource(stream);
+                mic.connect(analyser);
+                const data = new Uint8Array(analyser.frequencyBinCount);
+                function check() {
+                    analyser.getByteFrequencyData(data);
+                    let vol = data.reduce((a, b) => a + b) / data.length;
+                    if (vol > 45) putOutCandle(); else requestAnimationFrame(check);
+                }
+                check();
+            }).catch(() => console.log("Mic access denied or unavailable."));
+        }
+
+        function moveMouse() {
+            if(currentScore >= 7) return;
+            const area = document.getElementById('game-area');
+            const m = document.getElementById('mouse');
+            const maxX = area.clientWidth - (mouseSize + 10);
+            const maxY = area.clientHeight - (mouseSize + 10);
+            m.style.left = Math.max(0, Math.random() * maxX) + 'px';
+            m.style.top = Math.max(0, Math.random() * maxY) + 'px';
+        }
+
+        function catchMouse() {
+            currentScore++;
+            mouseSize += 25; 
+            document.getElementById('mouse').style.fontSize = mouseSize + 'px';
+            document.getElementById('score').innerText = currentScore;
+            if(currentScore >= 7) nextLevel(5); else moveMouse();
+        }
+    </script>
+</body>
+</html>
